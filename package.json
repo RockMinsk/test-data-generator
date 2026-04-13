@@ -1,0 +1,32 @@
+{
+  "name": "test-data-generator",
+  "version": "1.0.0",
+  "description": "Test Data Generator POC - classicmodels MySQL",
+  "main": "dist/cli.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/cli.ts",
+    "start:config": "ts-node src/cli.ts config.json",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "mysql2": "^3.22.0",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.6.0",
+    "eslint": "^10.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.2"
+  },
+  "author": "Kiryl Shytsikau",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RockMinsk/test-data-generator.git"
+  }
+}

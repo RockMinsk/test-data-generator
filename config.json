@@ -1,0 +1,39 @@
+{
+  "db": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "welcome",
+    "database": "classicmodels",
+    "connectionLimit": 10
+  },
+  "seed": {
+    "faker_seed": 12345,
+    "offices": 5,
+    "employees_per_office": 100,
+    "product_lines": 50,
+    "products_per_line": 500,
+    "customers": 10000
+  },
+  "generate": {
+    "orders_per_customer": 10,
+    "order_details_per_order": { "min": 1, "max": 5 }
+  },
+  "validity": {
+    "orders": {
+      "with_payment": 0.70,
+      "without_payment": 0.15,
+      "with_multiple_payments": 0.15
+    },
+    "employees": {
+      "with_manager": 0.85,
+      "without_manager": 0.15
+    },
+    "offices": {
+      "with_employees": 0.80,
+      "without_employees": 0.20
+    }
+  },
+  "batch_size": 1000,
+  "log_level": "info"
+}

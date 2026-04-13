@@ -1,0 +1,81 @@
+name: TDG - Seed Test Database
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1' # Every Monday at 6AM UTC (start of sprint)
+
+jobs:
+  seed-test-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Generate config from secrets
+        run: |
+          cat > config.runtime.json << EOF
+          {
+            "db": {
+              "host": "${{ secrets.TEST_DB_HOST }}",
+              "port": 3306,
+              "user": "${{ secrets.TEST_DB_USER }}",
+              "password": "${{ secrets.TEST_DB_PASSWORD }}",
+              "database": "classicmodels",
+              "connectionLimit": 10
+            },
+            "seed": {
+              "faker_seed": 12345,
+              "offices": 5,
+              "employees_per_office": 100,
+              "product_lines": 50,
+              "products_per_line": 500,
+              "customers": 10000
+            },
+            "generate": {
+              "orders_per_customer": 10,
+              "order_details_per_order": { "min": 1, "max": 5 }
+            },
+            "validity": {
+              "orders": {
+                "with_payment": 0.70,
+                "without_payment": 0.15,
+                "with_multiple_payments": 0.15
+              },
+              "employees": {
+                "with_manager": 0.85,
+                "without_manager": 0.15
+              },
+              "offices": {
+                "with_employees": 0.80,
+                "without_employees": 0.20
+              }
+            },
+            "batch_size": 1000,
+            "log_level": "info"
+          }
+          EOF
+
+      - name: Run TDG
+        run: node dist/cli.js config.runtime.json
+
+      - name: Upload run log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tdg-run-log
+          path: tdg-run-*.log
+          if-no-files-found: ignore
